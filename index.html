@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Legado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--v:#2A6041;--vm:#3D8A5E;--vc:#E6F2EC;--vs:#F0F7F3;--c:#FAFAF6;--t:#1A1A16;--ts:#5A5A52;--b:#D5DAD0;--w:#FFFFFF}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--c);color:var(--t)}
+body{display:flex;align-items:center;justify-content:center;padding:0}
+#app{width:100%;max-width:430px;height:100vh;max-height:780px;background:var(--w);display:flex;flex-direction:column;border-radius:0;overflow:hidden;border:1px solid var(--b)}
+@media(min-width:500px){#app{border-radius:24px;height:90vh;box-shadow:0 8px 40px rgba(42,96,65,.12)}}
+
+.hdr{padding:16px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:12px;flex-shrink:0;background:var(--w)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--vc);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.av svg{width:22px;height:22px;stroke:var(--v);fill:none;stroke-width:2;stroke-linecap:round}
+.hn{font-size:18px;font-weight:600;color:var(--v)}
+.hst{font-size:13px;color:var(--vm);margin-top:1px}
+
+#inicio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;gap:20px;text-align:center;overflow-y:auto}
+.ii{width:84px;height:84px;border-radius:50%;background:var(--vc);display:flex;align-items:center;justify-content:center}
+.ii svg{width:42px;height:42px;stroke:var(--v);fill:none;stroke-width:1.8;stroke-linecap:round}
+.it{font-size:26px;font-weight:600;color:var(--t);line-height:1.25}
+.is{font-size:16px;color:var(--ts);line-height:1.6;max-width:300px}
+.ipasos{background:var(--vs);border:1px solid var(--vc);border-radius:16px;padding:18px 20px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:left}
+.paso{display:flex;align-items:center;gap:12px}
+.pn{width:32px;height:32px;border-radius:50%;background:var(--v);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#fff;flex-shrink:0}
+.pt{font-size:16px;color:var(--ts);line-height:1.4}
+.btnok{background:var(--v);color:#fff;border:none;border-radius:50px;padding:18px 0;font-size:18px;font-weight:600;cursor:pointer;width:100%;font-family:'Inter',sans-serif;transition:background .2s}
+.btnok:hover{background:var(--vm)}
+.btnok:active{transform:scale(.98)}
+.nota{font-size:13px;color:#bbb;line-height:1.5;max-width:280px}
+
+#chat{flex:1;overflow-y:auto;padding:18px 14px;display:flex;flex-direction:column;gap:12px;display:none;-webkit-overflow-scrolling:touch}
+#chat::-webkit-scrollbar{width:3px}
+#chat::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
+.mw{display:flex;flex-direction:column;max-width:86%}
+.mw.b{align-self:flex-start}
+.mw.u{align-self:flex-end}
+.ml{font-size:12px;color:#bbb;margin-bottom:4px}
+.mb{padding:13px 17px;border-radius:20px;font-size:17px;line-height:1.6}
+.mb.b{background:var(--vs);border:1px solid var(--vc);color:var(--t);border-bottom-left-radius:4px}
+.mb.u{background:var(--v);color:#fff;border-bottom-right-radius:4px}
+.dots{display:flex;gap:5px;padding:13px 17px;background:var(--vs);border:1px solid var(--vc);border-radius:20px;border-bottom-left-radius:4px;width:fit-content}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--b);animation:d 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes d{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px);background:var(--v)}}
+
+#inp{background:var(--w);border-top:1px solid var(--b);padding:10px 14px 18px;flex-shrink:0;display:none}
+#vst{font-size:13px;color:#dc3545;text-align:center;min-height:18px;margin-bottom:7px;font-weight:500}
+.irow{display:flex;gap:8px;align-items:flex-end}
+#txt{flex:1;font-size:17px;padding:13px 17px;border-radius:24px;border:1.5px solid var(--b);background:var(--vs);color:var(--t);resize:none;min-height:50px;max-height:120px;line-height:1.5;font-family:'Inter',sans-serif;outline:none;-webkit-appearance:none}
+#txt:focus{border-color:var(--vm)}
+#txt::placeholder{color:#bbb;font-size:16px}
+.ibtn{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--b);background:var(--w);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.ibtn svg{width:22px;height:22px;stroke:var(--ts);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#benv{background:var(--v);border-color:var(--v)}
+#benv svg{stroke:#fff}
+#bvoz.grab{background:#fff0f0;border-color:#dc3545;animation:vp 1s infinite}
+#bvoz.grab svg{stroke:#dc3545}
+@keyframes vp{0%,100%{box-shadow:0 0 0 0 rgba(220,53,69,.3)}50%{box-shadow:0 0 0 10px transparent}}
+.hint{font-size:13px;color:#bbb;text-align:center;margin-top:8px}
+
+.pcard{background:var(--vs);border:1.5px solid var(--vc);border-radius:16px;padding:16px;margin-top:4px}
+.pct{font-size:11px;font-weight:600;color:var(--v);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.pf{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--vc)}
+.pf:last-child{border:none}
+.pk{font-size:14px;color:var(--ts);flex-shrink:0}
+.pv{font-size:14px;color:var(--t);font-weight:500;text-align:right;max-width:210px;line-height:1.4}
+.pbadge{background:var(--v);color:#fff;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div class="av">
+      <svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 6 3 11c0 6 9 13 9 13s9-7 9-13c0-5-4-9-9-9z"/><circle cx="12" cy="11" r="3"/></svg>
+    </div>
+    <div>
+      <div class="hn">Legado</div>
+      <div class="hst" id="hst">Tu compañero siempre disponible</div>
+    </div>
+  </div>
+
+  <div id="inicio">
+    <div class="ii">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </div>
+    <h1 class="it">Hola, queremos<br>conocerte</h1>
+    <p class="is">Estamos construyendo algo especial para personas como tú. Solo son unos minutos.</p>
+    <div class="ipasos">
+      <div class="paso"><div class="pn">1</div><div class="pt">Te hacemos preguntas sencillas sobre tu vida</div></div>
+      <div class="paso"><div class="pn">2</div><div class="pt">Responde escribiendo o con tu voz 🎙️</div></div>
+      <div class="paso"><div class="pn">3</div><div class="pt">Al final te contamos lo que encontramos sobre ti</div></div>
+    </div>
+    <button class="btnok" onclick="iniciar()">Comenzar la conversación</button>
+    <p class="nota">Tu información es confidencial y solo se usa para mejorar Legado.</p>
+  </div>
+
+  <div id="chat"></div>
+
+  <div id="inp">
+    <div id="vst"></div>
+    <div class="irow">
+      <button class="ibtn" id="bvoz" onclick="toggleVoz()" aria-label="Grabar voz">
+        <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <textarea id="txt" placeholder="Escribe tu respuesta aquí..." rows="1" onkeydown="onKey(event)" oninput="rzta(this)"></textarea>
+      <button class="ibtn" id="benv" onclick="enviar()" aria-label="Enviar">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="hint">Toca el micrófono para hablar, o escribe tu respuesta</div>
+  </div>
+</div>
+
+<script>
+const OK='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';
+
+const SYS=`Eres Legado, un asistente muy cálido que conversa con adultos mayores en Colombia para conocerlos. Conversación natural y humana, nunca una encuesta.
+
+REGLAS:
+- UNA sola pregunta por mensaje, corta y clara (máximo 2 líneas)
+- Reacciona con empatía genuina antes de la siguiente pregunta
+- Usa el nombre cuando lo sepas
+- Lenguaje sencillo, como un nieto atento
+- Nunca menciones "perfil", "arquetipo" ni términos técnicos
+
+TEMAS (explorar naturalmente en orden):
+1. Nombre, edad, ciudad, con quién vive
+2. A qué se dedicó en su vida
+3. Cómo es su semana, con quién se relaciona
+4. Si tiene suficiente compañía o quisiera más
+5. Qué le apasiona o quisiera hacer
+6. Situación económica (sutil: trabaja aún, tiene pensión)
+7. Qué quisiera que Legado le ayudara
+
+CIERRE (mínimo 8 intercambios reales, cuando tengas suficiente info):
+Responde EXACTAMENTE este bloque y nada más:
+
+===PERFIL===
+NOMBRE: [nombre]
+RESUMEN: [2 frases cálidas sobre quién es]
+PRESION: [Tranquilo / Media / Alta]
+RED: [Tiene red / Quiere construirla / Aislado]
+MODO: [Dador / Buscador / Explorador]
+ARQUETIPO: [El Activo Conectado / El que Quiere Más / El Independiente / El Tranquilo]
+ACCION: [qué ofrecerle primero]
+DESPEDIDA: [mensaje personal y cálido usando su nombre, 2-3 líneas]
+===FIN===`;
+
+let H=[],MR=null,CH=[],GR=false;
+const $c=()=>document.getElementById('chat');
+
+function burbuja(txt,rol){
+  const c=$c(),w=document.createElement('div');
+  w.className=`mw ${rol==='assistant'?'b':'u'}`;
+  const l=document.createElement('div');l.className='ml';
+  l.textContent=rol==='assistant'?'Legado 🌿':'Tú';
+  const b=document.createElement('div');b.className=`mb ${rol==='assistant'?'b':'u'}`;
+  b.textContent=txt;
+  w.appendChild(l);w.appendChild(b);c.appendChild(w);c.scrollTop=c.scrollHeight;
+}
+
+function showDots(){
+  const c=$c(),w=document.createElement('div');
+  w.className='mw b';w.id='ty';
+  const d=document.createElement('div');d.className='dots';
+  d.innerHTML='<span></span><span></span><span></span>';
+  w.appendChild(d);c.appendChild(w);c.scrollTop=c.scrollHeight;
+}
+function hideDots(){const t=document.getElementById('ty');if(t)t.remove();}
+
+function parsePerfil(txt){
+  if(!txt.includes('===PERFIL==='))return null;
+  const blk=txt.split('===PERFIL===')[1].split('===FIN===')[0];
+  const g=k=>{const l=blk.split('\n').find(x=>x.trim().startsWith(k+':'));return l?l.replace(k+':','').trim():''};
+  return{nombre:g('NOMBRE'),resumen:g('RESUMEN'),presion:g('PRESION'),red:g('RED'),modo:g('MODO'),arquetipo:g('ARQUETIPO'),accion:g('ACCION'),despedida:g('DESPEDIDA')};
+}
+
+function mostrarPerfil(p){
+  burbuja(p.despedida||`Gracias ${p.nombre}, fue un honor conocerte. Pronto Legado estará listo para ti. 🌿`,'assistant');
+  const c=$c(),w=document.createElement('div');w.className='mw b';
+  w.innerHTML=`<div class="pcard">
+    <div class="pct">Tu perfil Legado</div>
+    <div class="pf"><span class="pk">Quién eres</span><span class="pv" style="font-weight:400">${p.resumen}</span></div>
+    <div class="pf"><span class="pk">Arquetipo</span><span class="pbadge">${p.arquetipo}</span></div>
+    <div class="pf"><span class="pk">Situación</span><span class="pv">${p.presion}</span></div>
+    <div class="pf"><span class="pk">Red social</span><span class="pv">${p.red}</span></div>
+    <div class="pf"><span class="pk">Lo primero</span><span class="pv" style="font-weight:400">${p.accion}</span></div>
+  </div>`;
+  c.appendChild(w);c.scrollTop=c.scrollHeight;
+  document.getElementById('inp').style.display='none';
+  document.getElementById('hst').textContent='Conversación completada ✓';
+}
+
+async function callGPT(msg){
+  H.push({role:'user',content:msg});
+  showDots();
+  try{
+    const r=await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${OK}`},
+      body:JSON.stringify({model:'gpt-4o',max_tokens:500,messages:[{role:'system',content:SYS},...H]})
+    });
+    const d=await r.json();
+    hideDots();
+    const resp=d.choices&&d.choices[0]?d.choices[0].message.content:'Perdona, tuve un problema. ¿Puedes repetir?';
+    H.push({role:'assistant',content:resp});
+    const p=parsePerfil(resp);
+    if(p)mostrarPerfil(p);else burbuja(resp,'assistant');
+  }catch(e){hideDots();burbuja('Perdona, tuve un problema. ¿Puedes escribirme de nuevo?','assistant');}
+}
+
+async function whisper(blob){
+  const fd=new FormData();
+  fd.append('file',blob,'audio.webm');
+  fd.append('model','whisper-1');
+  fd.append('language','es');
+  const r=await fetch('https://api.openai.com/v1/audio/transcriptions',{
+    method:'POST',headers:{'Authorization':`Bearer ${OK}`},body:fd
+  });
+  const d=await r.json();return d.text||'';
+}
+
+async function toggleVoz(){
+  if(!GR){
+    try{
+      const s=await navigator.mediaDevices.getUserMedia({audio:true});
+      MR=new MediaRecorder(s);CH=[];
+      MR.ondataavailable=e=>CH.push(e.data);
+      MR.onstop=async()=>{
+        const blob=new Blob(CH,{type:'audio/webm'});
+        document.getElementById('vst').textContent='Escuchando tu mensaje...';
+        document.getElementById('bvoz').disabled=true;
+        try{
+          const t=await whisper(blob);
+          document.getElementById('vst').textContent='';
+          document.getElementById('bvoz').disabled=false;
+          if(t&&t.trim()){burbuja(t,'user');await callGPT(t);}
+        }catch(e){
+          document.getElementById('vst').textContent='';
+          document.getElementById('bvoz').disabled=false;
+          burbuja('No pude escuchar bien. ¿Lo repetimos?','assistant');
+        }
+        s.getTracks().forEach(t=>t.stop());
+      };
+      MR.start();GR=true;
+      document.getElementById('bvoz').classList.add('grab');
+      document.getElementById('vst').textContent='🔴 Grabando... toca de nuevo para terminar';
+    }catch(e){document.getElementById('vst').textContent='Activa el micrófono en tu navegador';}
+  }else{
+    MR.stop();GR=false;
+    document.getElementById('bvoz').classList.remove('grab');
+    document.getElementById('vst').textContent='';
+  }
+}
+
+function enviar(){
+  const t=document.getElementById('txt').value.trim();
+  if(!t)return;
+  document.getElementById('txt').value='';
+  document.getElementById('txt').style.height='auto';
+  burbuja(t,'user');callGPT(t);
+}
+
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
+function rzta(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+
+async function iniciar(){
+  document.getElementById('inicio').style.display='none';
+  document.getElementById('chat').style.display='flex';
+  document.getElementById('inp').style.display='block';
+  showDots();
+  try{
+    const r=await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${OK}`},
+      body:JSON.stringify({model:'gpt-4o',max_tokens:150,messages:[{role:'system',content:SYS},{role:'user',content:'Hola'}]})
+    });
+    const d=await r.json();
+    hideDots();
+    const resp=d.choices&&d.choices[0]?d.choices[0].message.content:'¡Hola! Soy Legado, tu nuevo compañero. ¿Cómo te llamas?';
+    H.push({role:'user',content:'Hola'});
+    H.push({role:'assistant',content:resp});
+    burbuja(resp,'assistant');
+  }catch(e){hideDots();burbuja('¡Hola! Soy Legado. ¿Cómo te llamas?','assistant');}
+  document.getElementById('txt').focus();
+}
+</script>
+</body>
+</html>
