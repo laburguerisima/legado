@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Legado — Cuéntanos tu historia</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --verde:#2A6041;--verde-m:#3D8A5E;--verde-cl:#E6F2EC;--verde-s:#F0F7F3;
+  --dorado:#9A7B0A;--crema:#FAFAF6;--texto:#1A1A16;--texto-s:#5A5A52;
+  --borde:#D5DAD0;--blanco:#FFFFFF;
+}
+html{font-size:18px}
+body{font-family:'Inter',sans-serif;background:var(--crema);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+#app{width:100%;max-width:440px;background:var(--blanco);border-radius:24px;border:1px solid var(--borde);overflow:hidden;display:flex;flex-direction:column;min-height:90vh;max-height:90vh;box-shadow:0 8px 40px rgba(42,96,65,0.10)}
+.header{padding:18px 22px;border-bottom:1px solid var(--borde);display:flex;align-items:center;gap:14px;background:var(--blanco);flex-shrink:0}
+.av{width:46px;height:46px;border-radius:50%;background:var(--verde-cl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.av svg{width:24px;height:24px;stroke:var(--verde);fill:none;stroke-width:2;stroke-linecap:round}
+.hn{font-size:18px;font-weight:600;color:var(--verde)}
+.hs{font-size:13px;color:var(--verde-m);margin-top:1px}
+
+/* INICIO */
+#inicio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:22px;text-align:center}
+.i-icon{width:88px;height:88px;border-radius:50%;background:var(--verde-cl);display:flex;align-items:center;justify-content:center}
+.i-icon svg{width:44px;height:44px;stroke:var(--verde);fill:none;stroke-width:1.8;stroke-linecap:round}
+.i-titulo{font-size:26px;font-weight:600;color:var(--texto);line-height:1.3}
+.i-sub{font-size:16px;color:var(--texto-s);line-height:1.6;max-width:300px}
+.i-pasos{background:var(--verde-s);border:1px solid var(--verde-cl);border-radius:16px;padding:20px;width:100%;display:flex;flex-direction:column;gap:16px;text-align:left}
+.paso{display:flex;align-items:center;gap:14px}
+.pn{width:34px;height:34px;border-radius:50%;background:var(--verde);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#fff;flex-shrink:0}
+.pt{font-size:16px;color:var(--texto-s);line-height:1.4}
+.btn-ok{background:var(--verde);color:#fff;border:none;border-radius:50px;padding:20px 0;font-size:18px;font-weight:600;cursor:pointer;width:100%;font-family:'Inter',sans-serif;letter-spacing:0.01em;transition:background 0.2s;-webkit-tap-highlight-color:transparent}
+.btn-ok:hover{background:var(--verde-m)}
+.btn-ok:active{transform:scale(0.98)}
+.nota{font-size:13px;color:#aaa;line-height:1.5;max-width:280px}
+
+/* CHAT */
+#chat{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:14px;display:none;-webkit-overflow-scrolling:touch}
+#chat::-webkit-scrollbar{width:3px}
+#chat::-webkit-scrollbar-thumb{background:var(--borde);border-radius:4px}
+.mw{display:flex;flex-direction:column;max-width:86%}
+.mw.b{align-self:flex-start}
+.mw.u{align-self:flex-end}
+.ml{font-size:12px;color:#aaa;margin-bottom:5px;letter-spacing:0.03em}
+.mb{padding:14px 18px;border-radius:20px;font-size:17px;line-height:1.6}
+.mb.b{background:var(--verde-s);border:1px solid var(--verde-cl);color:var(--texto);border-bottom-left-radius:5px}
+.mb.u{background:var(--verde);color:#fff;border-bottom-right-radius:5px}
+.typing{display:flex;gap:5px;padding:14px 18px;background:var(--verde-s);border:1px solid var(--verde-cl);border-radius:20px;border-bottom-left-radius:5px;width:fit-content}
+.typing span{width:9px;height:9px;border-radius:50%;background:var(--borde);animation:ty 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes ty{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px);background:var(--verde)}}
+
+/* INPUT */
+#inp{background:var(--blanco);border-top:1px solid var(--borde);padding:12px 16px 20px;flex-shrink:0;display:none}
+#vst{font-size:13px;color:#dc3545;text-align:center;min-height:18px;margin-bottom:8px;font-weight:500}
+.irow{display:flex;gap:10px;align-items:flex-end}
+#txt{flex:1;font-size:17px;padding:13px 18px;border-radius:26px;border:1.5px solid var(--borde);background:var(--verde-s);color:var(--texto);resize:none;min-height:50px;max-height:130px;line-height:1.5;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+#txt:focus{border-color:var(--verde)}
+#txt::placeholder{color:#bbb;font-size:16px}
+.ibtn{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--borde);background:var(--blanco);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.ibtn svg{width:22px;height:22px;stroke:var(--texto-s);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ibtn:hover{background:var(--verde-s)}
+#benv{background:var(--verde);border-color:var(--verde)}
+#benv svg{stroke:#fff}
+#benv:hover{background:var(--verde-m)}
+#bvoz.grab{background:#fff0f0;border-color:#dc3545;animation:vp 1s infinite}
+#bvoz.grab svg{stroke:#dc3545}
+@keyframes vp{0%,100%{box-shadow:0 0 0 0 rgba(220,53,69,.3)}50%{box-shadow:0 0 0 10px transparent}}
+.hint{font-size:13px;color:#bbb;text-align:center;margin-top:10px}
+
+/* PERFIL */
+.pcard{background:var(--verde-s);border:1.5px solid var(--verde-cl);border-radius:16px;padding:18px;margin-top:6px}
+.pcard-t{font-size:12px;font-weight:600;color:var(--verde);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px}
+.pfila{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--verde-cl)}
+.pfila:last-child{border:none}
+.pk{font-size:14px;color:var(--texto-s);flex-shrink:0}
+.pv{font-size:14px;color:var(--texto);font-weight:500;text-align:right;max-width:220px;line-height:1.4}
+.pbadge{background:var(--verde);color:#fff;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600}
+
+@media(max-width:480px){
+  body{padding:0}
+  #app{border-radius:0;min-height:100vh;max-height:100vh}
+  .mb{font-size:16px}
+  .i-titulo{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="av">
+      <svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 6 3 11c0 6 9 13 9 13s9-7 9-13c0-5-4-9-9-9z"/><circle cx="12" cy="11" r="3"/></svg>
+    </div>
+    <div>
+      <div class="hn">Legado</div>
+      <div class="hs" id="hs">Tu compañero siempre disponible</div>
+    </div>
+  </div>
+
+  <div id="inicio">
+    <div class="i-icon">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </div>
+    <h1 class="i-titulo">Hola, queremos<br>conocerte</h1>
+    <p class="i-sub">Estamos construyendo algo especial para personas como tú. Solo son unos minutos.</p>
+    <div class="i-pasos">
+      <div class="paso"><div class="pn">1</div><div class="pt">Te hacemos preguntas sencillas sobre tu vida</div></div>
+      <div class="paso"><div class="pn">2</div><div class="pt">Responde escribiendo o con tu voz 🎙️</div></div>
+      <div class="paso"><div class="pn">3</div><div class="pt">Al final te contamos lo que encontramos sobre ti</div></div>
+    </div>
+    <button class="btn-ok" onclick="iniciar()">Comenzar la conversación</button>
+    <p class="nota">Tu información es confidencial y solo se usa para mejorar Legado.</p>
+  </div>
+
+  <div id="chat"></div>
+
+  <div id="inp">
+    <div id="vst"></div>
+    <div class="irow">
+      <button class="ibtn" id="bvoz" onclick="toggleVoz()" aria-label="Grabar voz">
+        <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <textarea id="txt" placeholder="Escribe tu respuesta aquí..." rows="1" onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+      <button class="ibtn" id="benv" onclick="enviarTexto()" aria-label="Enviar">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="hint">Toca el micrófono para hablar, o escribe tu respuesta</div>
+  </div>
+</div>
+
+<script>
+const AK='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';
+const OK='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';
+
+const SYS=`Eres Legado, un asistente muy cálido que conversa con adultos mayores en Colombia para conocerlos. Conversación natural y humana, nunca una encuesta.
+
+REGLAS:
+- UNA sola pregunta por mensaje, corta y clara (máximo 2 líneas)
+- Reacciona con empatía genuina antes de la siguiente pregunta
+- Usa el nombre cuando lo sepas
+- Lenguaje sencillo, como un nieto atento
+- Nunca menciones "perfil", "arquetipo" ni términos técnicos
+
+TEMAS (explorar naturalmente):
+1. Nombre, edad, ciudad, con quién vive
+2. A qué se dedicó en su vida
+3. Cómo es su semana, con quién se relaciona
+4. Si tiene suficiente compañía o quisiera más
+5. Qué le apasiona o quisiera hacer
+6. Situación económica (sutil)
+7. Qué quisiera que Legado le ayudara
+
+CIERRE (mínimo 8 intercambios):
+Responde SOLO este bloque exacto:
+
+===PERFIL===
+NOMBRE: [nombre]
+RESUMEN: [2 frases cálidas sobre quién es]
+PRESION: [Tranquilo / Media / Alta]
+RED: [Tiene red / Quiere construirla / Aislado]
+MODO: [Dador / Buscador / Explorador]
+ARQUETIPO: [El Activo Conectado / El que Quiere Más / El Independiente / El Tranquilo]
+ACCION: [qué ofrecerle primero]
+DESPEDIDA: [mensaje personal y cálido usando su nombre, 2-3 líneas]
+===FIN===`;
+
+let H=[],MR=null,CH=[],GR=false;
+
+const $chat=()=>document.getElementById('chat');
+
+function burbuja(txt,rol){
+  const c=$chat();
+  const w=document.createElement('div');
+  w.className=`mw ${rol==='assistant'?'b':'u'}`;
+  const l=document.createElement('div');
+  l.className='ml';
+  l.textContent=rol==='assistant'?'Legado 🌿':'Tú';
+  const b=document.createElement('div');
+  b.className=`mb ${rol==='assistant'?'b':'u'}`;
+  b.textContent=txt;
+  w.appendChild(l);w.appendChild(b);
+  c.appendChild(w);c.scrollTop=c.scrollHeight;
+}
+
+function showTyping(){
+  const c=$chat();
+  const w=document.createElement('div');
+  w.className='mw b';w.id='ty';
+  const d=document.createElement('div');
+  d.className='typing';
+  d.innerHTML='<span></span><span></span><span></span>';
+  w.appendChild(d);c.appendChild(w);c.scrollTop=c.scrollHeight;
+}
+
+function hideTyping(){const t=document.getElementById('ty');if(t)t.remove();}
+
+function parsePerfil(txt){
+  if(!txt.includes('===PERFIL==='))return null;
+  const blk=txt.split('===PERFIL===')[1].split('===FIN===')[0];
+  const g=k=>{const l=blk.split('\n').find(x=>x.trim().startsWith(k+':'));return l?l.replace(k+':','').trim():''};
+  return{nombre:g('NOMBRE'),resumen:g('RESUMEN'),presion:g('PRESION'),red:g('RED'),modo:g('MODO'),arquetipo:g('ARQUETIPO'),accion:g('ACCION'),despedida:g('DESPEDIDA')};
+}
+
+function mostrarPerfil(p){
+  burbuja(p.despedida||`Gracias ${p.nombre}, fue un honor conocerte. Pronto Legado estará listo para ti. 🌿`,'assistant');
+  const c=$chat();
+  const w=document.createElement('div');
+  w.className='mw b';
+  w.innerHTML=`<div class="pcard">
+    <div class="pcard-t">Tu perfil Legado</div>
+    <div class="pfila"><span class="pk">Quién eres</span><span class="pv" style="font-weight:400">${p.resumen}</span></div>
+    <div class="pfila"><span class="pk">Arquetipo</span><span class="pbadge">${p.arquetipo}</span></div>
+    <div class="pfila"><span class="pk">Situación</span><span class="pv">${p.presion}</span></div>
+    <div class="pfila"><span class="pk">Red social</span><span class="pv">${p.red}</span></div>
+    <div class="pfila"><span class="pk">Lo primero</span><span class="pv" style="font-weight:400">${p.accion}</span></div>
+  </div>`;
+  c.appendChild(w);c.scrollTop=c.scrollHeight;
+  document.getElementById('inp').style.display='none';
+  document.getElementById('hs').textContent='Conversación completada ✓';
+}
+
+async function callClaude(msg){
+  H.push({role:'user',content:msg});
+  showTyping();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':AK,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,system:SYS,messages:H})
+    });
+    const d=await r.json();
+    hideTyping();
+    const resp=d.content&&d.content[0]?d.content[0].text:'Perdona, tuve un problema. ¿Puedes repetir?';
+    H.push({role:'assistant',content:resp});
+    const p=parsePerfil(resp);
+    if(p)mostrarPerfil(p);
+    else burbuja(resp,'assistant');
+  }catch(e){hideTyping();burbuja('Perdona, tuve un problema. ¿Puedes escribirme de nuevo?','assistant');}
+}
+
+async function whisper(blob){
+  const fd=new FormData();
+  fd.append('file',blob,'audio.webm');
+  fd.append('model','whisper-1');
+  fd.append('language','es');
+  const r=await fetch('https://api.openai.com/v1/audio/transcriptions',{
+    method:'POST',headers:{'Authorization':`Bearer ${OK}`},body:fd
+  });
+  const d=await r.json();
+  return d.text||'';
+}
+
+async function toggleVoz(){
+  if(!GR){
+    try{
+      const s=await navigator.mediaDevices.getUserMedia({audio:true});
+      MR=new MediaRecorder(s);CH=[];
+      MR.ondataavailable=e=>CH.push(e.data);
+      MR.onstop=async()=>{
+        const blob=new Blob(CH,{type:'audio/webm'});
+        document.getElementById('vst').textContent='Escuchando tu mensaje...';
+        document.getElementById('bvoz').disabled=true;
+        try{
+          const t=await whisper(blob);
+          document.getElementById('vst').textContent='';
+          document.getElementById('bvoz').disabled=false;
+          if(t&&t.trim()){burbuja(t,'user');await callClaude(t);}
+        }catch(e){
+          document.getElementById('vst').textContent='';
+          document.getElementById('bvoz').disabled=false;
+          burbuja('No pude escuchar bien. ¿Lo repetimos?','assistant');
+        }
+        s.getTracks().forEach(t=>t.stop());
+      };
+      MR.start();GR=true;
+      document.getElementById('bvoz').classList.add('grab');
+      document.getElementById('vst').textContent='🔴 Grabando... toca de nuevo para terminar';
+    }catch(e){document.getElementById('vst').textContent='Activa el micrófono en tu navegador';}
+  }else{
+    MR.stop();GR=false;
+    document.getElementById('bvoz').classList.remove('grab');
+    document.getElementById('vst').textContent='';
+  }
+}
+
+function enviarTexto(){
+  const t=document.getElementById('txt').value.trim();
+  if(!t)return;
+  document.getElementById('txt').value='';
+  document.getElementById('txt').style.height='auto';
+  burbuja(t,'user');callClaude(t);
+}
+
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarTexto();}}
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,130)+'px';}
+
+async function iniciar(){
+  document.getElementById('inicio').style.display='none';
+  document.getElementById('chat').style.display='flex';
+  document.getElementById('inp').style.display='block';
+  showTyping();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':AK,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:200,system:SYS,messages:[{role:'user',content:'Hola'}]})
+    });
+    const d=await r.json();
+    hideTyping();
+    const resp=d.content&&d.content[0]?d.content[0].text:'¡Hola! Soy Legado, tu nuevo compañero. ¿Cómo te llamas?';
+    H.push({role:'user',content:'Hola'});
+    H.push({role:'assistant',content:resp});
+    burbuja(resp,'assistant');
+  }catch(e){hideTyping();burbuja('¡Hola! Soy Legado. ¿Cómo te llamas?','assistant');}
+  document.getElementById('txt').focus();
+}
+</script>
+</body>
+</html>
